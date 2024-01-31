@@ -26,3 +26,6 @@ Whether you're a beginner looking to dive into full-stack development or an expe
 
 in the recipe-api.ts this seems to be needed:
 require('dotenv').config();
+
+TimeStamps to look back on for personal project:
+35:17 - 'import * explanation for when you are going to have a bunch of functions and you want to import them all'

@@ -25,3 +25,5 @@ const searchRecipes = async (searchTerm: string, page:number) => {
         console.error('Error searching for recipes', error);
     }
 };
+
+export { searchRecipes }
