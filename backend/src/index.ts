@@ -11,7 +11,9 @@ app.get("/api/recipes/search", async (req, res) => {
     //GET http://localhost:5000/api/recipes/search?searchTerm=chicken&page=0
     const searchTerm = req.query.searchTerm as string;
     const page = parseInt(req.query.page as string);
-    const results = RecipeApi.searchRecipes(searchTerm, page);    
+    const results = await RecipeApi.searchRecipes(searchTerm, page);    
+
+    return res.json(results);
 })
 
 app.listen(5000, () => {
