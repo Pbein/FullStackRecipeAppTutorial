@@ -1,5 +1,5 @@
 import "./App.css";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import * as api from "./api";
 import { Recipe } from "./types";
 import RecipeCard from "./components/RecipeCard";
@@ -7,6 +7,7 @@ import RecipeCard from "./components/RecipeCard";
 const App = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const pageNumber = useRef(1);
 
   const handleSearchSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -18,22 +19,36 @@ const App = () => {
     }
   };
 
+  const handleViewMoreClick = async () => {
+    const nextPage = pageNumber.current + 1;
+    try {
+      const nextRecipes = await api.searchRecipes(searchTerm, nextPage);
+      setRecipes([...recipes, ...nextRecipes.results]);
+      pageNumber.current = nextPage;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={(event) => handleSearchSubmit(event)}>
-        <input 
-        type="text" 
-        required 
-        placeholder="Enter a search term ..."
-        value={searchTerm}
-        onChange={(event) => setSearchTerm(event.target.value)}
+        <input
+          type="text"
+          required
+          placeholder="Enter a search term ..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
         />
 
         <button type="submit">Submit</button>
       </form>
       {recipes.map((recipe) => (
-        <RecipeCard recipe={recipe}/>
+        <RecipeCard recipe={recipe} />
       ))}
+      <button className="view-more-button" onClick={handleViewMoreClick}>
+        View More
+      </button>
     </div>
   );
 };
